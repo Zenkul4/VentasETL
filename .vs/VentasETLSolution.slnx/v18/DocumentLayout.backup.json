@@ -1,0 +1,202 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{414A892D-7672-462F-ADAF-5623FEA0118F}|Infrastructure\\Infrastructure.csproj|c:\\users\\elava\\source\\repos\\ventasetlsolution\\infrastructure\\services\\etlservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{414A892D-7672-462F-ADAF-5623FEA0118F}|Infrastructure\\Infrastructure.csproj|solutionrelative:infrastructure\\services\\etlservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{414A892D-7672-462F-ADAF-5623FEA0118F}|Infrastructure\\Infrastructure.csproj|c:\\users\\elava\\source\\repos\\ventasetlsolution\\infrastructure\\infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{414A892D-7672-462F-ADAF-5623FEA0118F}|Infrastructure\\Infrastructure.csproj|solutionrelative:infrastructure\\infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{414A892D-7672-462F-ADAF-5623FEA0118F}|Infrastructure\\Infrastructure.csproj|c:\\users\\elava\\source\\repos\\ventasetlsolution\\infrastructure\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{414A892D-7672-462F-ADAF-5623FEA0118F}|Infrastructure\\Infrastructure.csproj|solutionrelative:infrastructure\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{414A892D-7672-462F-ADAF-5623FEA0118F}|Infrastructure\\Infrastructure.csproj|c:\\users\\elava\\source\\repos\\ventasetlsolution\\infrastructure\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{414A892D-7672-462F-ADAF-5623FEA0118F}|Infrastructure\\Infrastructure.csproj|solutionrelative:infrastructure\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{414A892D-7672-462F-ADAF-5623FEA0118F}|Infrastructure\\Infrastructure.csproj|c:\\users\\elava\\source\\repos\\ventasetlsolution\\infrastructure\\data\\ventasdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{414A892D-7672-462F-ADAF-5623FEA0118F}|Infrastructure\\Infrastructure.csproj|solutionrelative:infrastructure\\data\\ventasdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{414A892D-7672-462F-ADAF-5623FEA0118F}|Infrastructure\\Infrastructure.csproj|c:\\users\\elava\\source\\repos\\ventasetlsolution\\infrastructure\\data\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{414A892D-7672-462F-ADAF-5623FEA0118F}|Infrastructure\\Infrastructure.csproj|solutionrelative:infrastructure\\data\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{987387B9-3C43-45C4-BCD4-37AD1F50E496}|Core\\Core.csproj|c:\\users\\elava\\source\\repos\\ventasetlsolution\\core\\interfaces\\ietlservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{987387B9-3C43-45C4-BCD4-37AD1F50E496}|Core\\Core.csproj|solutionrelative:core\\interfaces\\ietlservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{987387B9-3C43-45C4-BCD4-37AD1F50E496}|Core\\Core.csproj|c:\\users\\elava\\source\\repos\\ventasetlsolution\\core\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{987387B9-3C43-45C4-BCD4-37AD1F50E496}|Core\\Core.csproj|solutionrelative:core\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{987387B9-3C43-45C4-BCD4-37AD1F50E496}|Core\\Core.csproj|c:\\users\\elava\\source\\repos\\ventasetlsolution\\core\\entities\\venta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{987387B9-3C43-45C4-BCD4-37AD1F50E496}|Core\\Core.csproj|solutionrelative:core\\entities\\venta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{987387B9-3C43-45C4-BCD4-37AD1F50E496}|Core\\Core.csproj|c:\\users\\elava\\source\\repos\\ventasetlsolution\\core\\resultpattern\\result.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{987387B9-3C43-45C4-BCD4-37AD1F50E496}|Core\\Core.csproj|solutionrelative:core\\resultpattern\\result.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Infrastructure",
+              "DocumentMoniker": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj",
+              "RelativeDocumentMoniker": "Infrastructure\\Infrastructure.csproj",
+              "ToolTip": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj",
+              "RelativeToolTip": "Infrastructure\\Infrastructure.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-07-03T02:27:13.608Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\appsettings.json",
+              "RelativeDocumentMoniker": "Infrastructure\\appsettings.json",
+              "ToolTip": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\appsettings.json",
+              "RelativeToolTip": "Infrastructure\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-07-03T01:30:58.644Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Program.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Program.cs",
+              "ToolTip": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Program.cs",
+              "RelativeToolTip": "Infrastructure\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-03T01:21:14.303Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "EtlService.cs",
+              "DocumentMoniker": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Services\\EtlService.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Services\\EtlService.cs",
+              "ToolTip": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Services\\EtlService.cs",
+              "RelativeToolTip": "Infrastructure\\Services\\EtlService.cs",
+              "ViewState": "AgIAAJYAAAAAAAAAAAAcwLYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-03T01:20:23.012Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UnitOfWork.cs",
+              "DocumentMoniker": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Data\\UnitOfWork.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Data\\UnitOfWork.cs",
+              "ToolTip": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Data\\UnitOfWork.cs",
+              "RelativeToolTip": "Infrastructure\\Data\\UnitOfWork.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-03T01:19:50.175Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "VentasDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Data\\VentasDbContext.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Data\\VentasDbContext.cs",
+              "ToolTip": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Data\\VentasDbContext.cs",
+              "RelativeToolTip": "Infrastructure\\Data\\VentasDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-03T01:15:18.353Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "IETLService.cs",
+              "DocumentMoniker": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Interfaces\\IETLService.cs",
+              "RelativeDocumentMoniker": "Core\\Interfaces\\IETLService.cs",
+              "ToolTip": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Interfaces\\IETLService.cs",
+              "RelativeToolTip": "Core\\Interfaces\\IETLService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-03T01:13:28.144Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IUnitOfWork.cs",
+              "DocumentMoniker": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Interfaces\\IUnitOfWork.cs",
+              "RelativeDocumentMoniker": "Core\\Interfaces\\IUnitOfWork.cs",
+              "ToolTip": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Interfaces\\IUnitOfWork.cs",
+              "RelativeToolTip": "Core\\Interfaces\\IUnitOfWork.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-03T01:13:14.065Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Venta.cs",
+              "DocumentMoniker": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Entities\\Venta.cs",
+              "RelativeDocumentMoniker": "Core\\Entities\\Venta.cs",
+              "ToolTip": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Entities\\Venta.cs",
+              "RelativeToolTip": "Core\\Entities\\Venta.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-03T01:12:42.18Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Result.cs",
+              "DocumentMoniker": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\ResultPattern\\Result.cs",
+              "RelativeDocumentMoniker": "Core\\ResultPattern\\Result.cs",
+              "ToolTip": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\ResultPattern\\Result.cs",
+              "RelativeToolTip": "Core\\ResultPattern\\Result.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-03T01:10:50.052Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

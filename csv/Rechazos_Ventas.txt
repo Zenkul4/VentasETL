@@ -1,0 +1,5 @@
+Registro 1 inválido (Formato): Could not find stored procedure 'sp_InsertarVenta'.
+Registro 2 inválido (Formato): Could not find stored procedure 'sp_InsertarVenta'.
+Registro 3 inválido (Formato): Could not find stored procedure 'sp_InsertarVenta'.
+Registro 4 inválido (Formato): Could not find stored procedure 'sp_InsertarVenta'.
+Registro 5 inválido (Formato): Could not find stored procedure 'sp_InsertarVenta'.
