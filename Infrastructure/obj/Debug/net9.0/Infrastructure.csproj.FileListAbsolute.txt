@@ -45,6 +45,7 @@ c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\bin\Debug\net9.0\Mi
 c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\bin\Debug\net9.0\Microsoft.Extensions.FileSystemGlobbing.dll
 c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\bin\Debug\net9.0\Microsoft.Extensions.Hosting.dll
 c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\bin\Debug\net9.0\Microsoft.Extensions.Hosting.Abstractions.dll
+c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\bin\Debug\net9.0\Microsoft.Extensions.Http.dll
 c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\bin\Debug\net9.0\Microsoft.Extensions.Identity.Core.dll
 c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\bin\Debug\net9.0\Microsoft.Extensions.Identity.Stores.dll
 c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\bin\Debug\net9.0\Microsoft.Extensions.Logging.dll
@@ -177,4 +178,3 @@ c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\obj\Debug\net9.0\re
 c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\obj\Debug\net9.0\Infrastructure.pdb
 c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\obj\Debug\net9.0\Infrastructure.genruntimeconfig.cache
 c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\obj\Debug\net9.0\ref\Infrastructure.dll
-C:\Users\elava\source\repos\VentasETLSolution\Infrastructure\bin\Debug\net9.0\Microsoft.Extensions.Http.dll

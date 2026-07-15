@@ -1,11 +1,8 @@
-using System.Globalization;
-using CsvHelper;
-using CsvHelper.Configuration;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using global::Core.Entities;
-using global::Core.Interfaces;
+using Core.Entities;
+using Core.Interfaces;
 using VentasETL.Core.Interfaces;
 using VentasETL.Core.ResultPattern;
 using VentasETL.Infrastructure.Data;
@@ -22,23 +19,73 @@ public class EtlService(
 {
     public async Task<Result> EjecutarProcesoCargaAsync(string directoryPath, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Iniciando el pipeline ETL completo...");
+        logger.LogInformation("Iniciando el pipeline ETL completo (Extracción de Multi-Fuentes)...");
 
-        // Extractores inyectados para uso futuro del pipeline multi-fuente
-        _ = clienteExtractor;
-        _ = productoExtractor;
-        _ = ventaExtractor;
+        // 1. Fase de Extracción
+        var clientesResult = await clienteExtractor.ExtractAsync(cancellationToken);
+        if (clientesResult.IsFailure) return Result.Failure($"Error en extracción de clientes: {clientesResult.Error}");
 
+        var productosResult = await productoExtractor.ExtractAsync(cancellationToken);
+        if (productosResult.IsFailure) return Result.Failure($"Error en extracción de productos: {productosResult.Error}");
+
+        var ventasResult = await ventaExtractor.ExtractAsync(cancellationToken);
+        if (ventasResult.IsFailure) return Result.Failure($"Error en extracción de ventas: {ventasResult.Error}");
+
+        // 2. Fase de Transformación y Carga (Data Warehouse)
         try
         {
             await unitOfWork.BeginTransactionAsync();
 
-            // 1. Cargar Catálogos Maestros primero (para no romper las FK)
-            await ProcesarClientesAsync(Path.Combine(directoryPath, "Clientes.csv"), cancellationToken);
-            await ProcesarProductosAsync(Path.Combine(directoryPath, "Productos.csv"), cancellationToken);
+            // Carga hacia Staging de Clientes
+            logger.LogInformation("Cargando clientes en Staging...");
+            foreach (var cliente in clientesResult.Value)
+            {
+                var param = new[] {
+                    new SqlParameter("@IdCliente", cliente.IdCliente),
+                    new SqlParameter("@Nombre", cliente.Nombre ?? ""),
+                    new SqlParameter("@Email", cliente.Email ?? ""),
+                    new SqlParameter("@Region", cliente.Region ?? "")
+                };
+                await dbContext.Database.ExecuteSqlRawAsync(
+                    "EXEC sp_InsertarCliente @IdCliente, @Nombre, @Email, @Region", param, cancellationToken);
+            }
 
-            // 2. Cargar la tabla Transaccional
-            await ProcesarVentasAsync(Path.Combine(directoryPath, "Ventas.csv"), cancellationToken);
+            // Carga hacia Staging de Productos
+            logger.LogInformation("Cargando productos en Staging...");
+            foreach (var producto in productosResult.Value)
+            {
+                var param = new[] {
+                    new SqlParameter("@IdProducto", producto.IdProducto),
+                    new SqlParameter("@Nombre", producto.Nombre ?? ""),
+                    new SqlParameter("@Categoria", producto.Categoria ?? ""),
+                    new SqlParameter("@Precio", producto.Precio)
+                };
+                await dbContext.Database.ExecuteSqlRawAsync(
+                    "EXEC sp_InsertarProducto @IdProducto, @Nombre, @Categoria, @Precio", param, cancellationToken);
+            }
+
+            // Carga hacia Staging de Ventas
+            logger.LogInformation("Cargando ventas en Staging...");
+            foreach (var venta in ventasResult.Value)
+            {
+                var param = new[] {
+                    new SqlParameter("@IdVenta", venta.IdVenta),
+                    new SqlParameter("@IdCliente", venta.IdCliente),
+                    new SqlParameter("@IdProducto", venta.IdProducto),
+                    new SqlParameter("@IdFuente", venta.IdFuente),
+                    new SqlParameter("@Cantidad", venta.Cantidad),
+                    new SqlParameter("@Precio", venta.Precio),
+                    new SqlParameter("@Fecha", venta.Fecha),
+                    new SqlParameter("@Total", venta.Total)
+                };
+                await dbContext.Database.ExecuteSqlRawAsync(
+                    "EXEC sp_InsertarVenta @IdVenta, @IdCliente, @IdProducto, @IdFuente, @Cantidad, @Precio, @Fecha, @Total", 
+                    param, cancellationToken);
+            }
+
+            // La inserción final en el esquema estrella se delega al stored procedure según la directriz
+            logger.LogInformation("Ejecutando consolidación final en Data Warehouse...");
+            await dbContext.Database.ExecuteSqlRawAsync("EXEC sp_ETL_CargarDataWarehouse", cancellationToken);
 
             await unitOfWork.CommitAsync();
             logger.LogInformation("Pipeline ETL finalizado exitosamente.");
@@ -49,137 +96,7 @@ public class EtlService(
         {
             await unitOfWork.RollbackAsync();
             logger.LogError(ex, "Fallo crítico en el pipeline ETL. Se ha hecho Rollback de todo.");
-            return Result.Failure($"Fallo en el pipeline: {ex.Message}");
+            return Result.Failure($"Fallo en el pipeline (Carga a BD): {ex.Message}");
         }
-    }
-
-    private async Task ProcesarClientesAsync(string filePath, CancellationToken ct)
-    {
-        if (!File.Exists(filePath))
-        {
-            logger.LogWarning("Archivo de clientes no encontrado: {Path}", filePath);
-            return;
-        }
-
-        logger.LogInformation("--> Procesando Clientes...");
-        using var reader = new StreamReader(filePath);
-        using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = true });
-
-        await csv.ReadAsync();
-        csv.ReadHeader();
-
-        int procesados = 0;
-        while (await csv.ReadAsync())
-        {
-            var idCliente = csv.GetField<int>("IdCliente");
-            var nombre = csv.GetField<string>("Nombre");
-            var email = csv.GetField<string>("Email");
-            var region = csv.GetField<string>("Region");
-
-            var param = new[] {
-                new SqlParameter("@IdCliente", idCliente),
-                new SqlParameter("@Nombre", nombre ?? ""),
-                new SqlParameter("@Email", email ?? ""),
-                new SqlParameter("@Region", region ?? "")
-            };
-
-            await dbContext.Database.ExecuteSqlRawAsync(
-                "EXEC sp_InsertarCliente @IdCliente, @Nombre, @Email, @Region", param, ct);
-            procesados++;
-        }
-        logger.LogInformation("Clientes procesados: {C}", procesados);
-    }
-
-    private async Task ProcesarProductosAsync(string filePath, CancellationToken ct)
-    {
-        if (!File.Exists(filePath))
-        {
-            logger.LogWarning("Archivo de productos no encontrado: {Path}", filePath);
-            return;
-        }
-
-        logger.LogInformation("--> Procesando Productos...");
-        using var reader = new StreamReader(filePath);
-        using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = true });
-
-        await csv.ReadAsync();
-        csv.ReadHeader();
-
-        int procesados = 0;
-        while (await csv.ReadAsync())
-        {
-            var idProducto = csv.GetField<int>("IdProducto");
-            var nombre = csv.GetField<string>("Nombre");
-            var categoria = csv.GetField<string>("Categoria");
-            var precio = csv.GetField<decimal>("Precio");
-
-            var param = new[] {
-                new SqlParameter("@IdProducto", idProducto),
-                new SqlParameter("@Nombre", nombre ?? ""),
-                new SqlParameter("@Categoria", categoria ?? ""),
-                new SqlParameter("@Precio", precio)
-            };
-
-            await dbContext.Database.ExecuteSqlRawAsync(
-                "EXEC sp_InsertarProducto @IdProducto, @Nombre, @Categoria, @Precio", param, ct);
-            procesados++;
-        }
-        logger.LogInformation("Productos procesados: {P}", procesados);
-    }
-
-    private async Task ProcesarVentasAsync(string filePath, CancellationToken ct)
-    {
-        if (!File.Exists(filePath)) throw new FileNotFoundException($"Falta {filePath}");
-
-        logger.LogInformation("--> Procesando Ventas...");
-        using var reader = new StreamReader(filePath);
-        using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = true });
-
-        await csv.ReadAsync();
-        csv.ReadHeader();
-
-        int procesados = 0, insertados = 0, rechazados = 0;
-        var errores = new List<string>();
-
-        while (await csv.ReadAsync())
-        {
-            procesados++;
-            try
-            {
-                var idVenta = csv.GetField<int>("IdVenta");
-                var idCliente = csv.GetField<int>("IdCliente");
-                var idProducto = csv.GetField<int>("IdProducto");
-                var cantidad = csv.GetField<int>("Cantidad");
-                var precio = csv.GetField<decimal>("Precio");
-                var fecha = csv.GetField<DateTime>("Fecha");
-
-                if (cantidad <= 0 || precio <= 0) throw new Exception("Cantidad o precio inválidos.");
-                var totalCalculado = cantidad * precio;
-
-                var parameters = new[] {
-                    new SqlParameter("@IdVenta", idVenta),
-                    new SqlParameter("@IdCliente", idCliente),
-                    new SqlParameter("@IdProducto", idProducto),
-                    new SqlParameter("@IdFuente", 1),
-                    new SqlParameter("@Cantidad", cantidad),
-                    new SqlParameter("@Precio", precio),
-                    new SqlParameter("@Fecha", fecha),
-                    new SqlParameter("@Total", totalCalculado)
-                };
-
-                await dbContext.Database.ExecuteSqlRawAsync(
-                    "EXEC sp_InsertarVenta @IdVenta, @IdCliente, @IdProducto, @IdFuente, @Cantidad, @Precio, @Fecha, @Total",
-                    parameters, ct);
-
-                insertados++;
-            }
-            catch (SqlException ex) when (ex.Number == 50001 || ex.Number == 547)
-            {
-                rechazados++;
-                errores.Add($"Fila {procesados}: Rechazo BD - {ex.Message}");
-            }
-        }
-
-        logger.LogInformation("Ventas -> Procesados: {P} | Insertados: {I} | Rechazados: {R}", procesados, insertados, rechazados);
     }
 }
