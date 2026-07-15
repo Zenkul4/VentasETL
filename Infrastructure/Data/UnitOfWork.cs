@@ -1,21 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage;
 using VentasETL.Core.Interfaces;
 
 namespace VentasETL.Infrastructure.Data;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork(VentasDbContext context) : IUnitOfWork
 {
-    private readonly VentasDbContext _context;
     private IDbContextTransaction? _transaction;
-
-    public UnitOfWork(VentasDbContext context)
-    {
-        _context = context;
-    }
 
     public async Task BeginTransactionAsync()
     {
-        _transaction = await _context.Database.BeginTransactionAsync();
+        _transaction = await context.Database.BeginTransactionAsync();
     }
 
     public async Task CommitAsync()
@@ -36,14 +30,15 @@ public class UnitOfWork : IUnitOfWork
         }
     }
 
-    public async Task<int> SaveChangesAsync()
+    public Task<int> SaveChangesAsync()
     {
-        return await _context.SaveChangesAsync();
+        return context.SaveChangesAsync();
     }
 
     public void Dispose()
     {
-        _context.Dispose();
+        context.Dispose();
         _transaction?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

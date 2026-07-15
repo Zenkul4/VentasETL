@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.Data.SqlClient;
@@ -10,26 +10,15 @@ using VentasETL.Infrastructure.Data;
 
 namespace VentasETL.Infrastructure.Services;
 
-public class EtlService : IETLService
+public class EtlService(VentasDbContext dbContext, ILogger<EtlService> logger, IUnitOfWork unitOfWork) : IETLService
 {
-    private readonly VentasDbContext _dbContext;
-    private readonly ILogger<EtlService> _logger;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public EtlService(VentasDbContext dbContext, ILogger<EtlService> logger, IUnitOfWork unitOfWork)
-    {
-        _dbContext = dbContext;
-        _logger = logger;
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<Result> EjecutarProcesoCargaAsync(string directoryPath, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Iniciando el pipeline ETL completo...");
+        logger.LogInformation("Iniciando el pipeline ETL completo...");
 
         try
         {
-            await _unitOfWork.BeginTransactionAsync();
+            await unitOfWork.BeginTransactionAsync();
 
             // 1. Cargar Catálogos Maestros primero (para no romper las FK)
             await ProcesarClientesAsync(Path.Combine(directoryPath, "Clientes.csv"), cancellationToken);
@@ -38,15 +27,15 @@ public class EtlService : IETLService
             // 2. Cargar la tabla Transaccional
             await ProcesarVentasAsync(Path.Combine(directoryPath, "Ventas.csv"), cancellationToken);
 
-            await _unitOfWork.CommitAsync();
-            _logger.LogInformation("Pipeline ETL finalizado exitosamente.");
+            await unitOfWork.CommitAsync();
+            logger.LogInformation("Pipeline ETL finalizado exitosamente.");
 
             return Result.Success();
         }
         catch (Exception ex)
         {
-            await _unitOfWork.RollbackAsync();
-            _logger.LogError("Fallo crítico en el pipeline ETL. Se ha hecho Rollback de todo. Error: {Msg}", ex.Message);
+            await unitOfWork.RollbackAsync();
+            logger.LogError(ex, "Fallo crítico en el pipeline ETL. Se ha hecho Rollback de todo.");
             return Result.Failure($"Fallo en el pipeline: {ex.Message}");
         }
     }
@@ -55,11 +44,11 @@ public class EtlService : IETLService
     {
         if (!File.Exists(filePath))
         {
-            _logger.LogWarning("Archivo de clientes no encontrado: {Path}", filePath);
+            logger.LogWarning("Archivo de clientes no encontrado: {Path}", filePath);
             return;
         }
 
-        _logger.LogInformation("--> Procesando Clientes...");
+        logger.LogInformation("--> Procesando Clientes...");
         using var reader = new StreamReader(filePath);
         using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = true });
 
@@ -81,22 +70,22 @@ public class EtlService : IETLService
                 new SqlParameter("@Region", region ?? "")
             };
 
-            await _dbContext.Database.ExecuteSqlRawAsync(
+            await dbContext.Database.ExecuteSqlRawAsync(
                 "EXEC sp_InsertarCliente @IdCliente, @Nombre, @Email, @Region", param, ct);
             procesados++;
         }
-        _logger.LogInformation("Clientes procesados: {C}", procesados);
+        logger.LogInformation("Clientes procesados: {C}", procesados);
     }
 
     private async Task ProcesarProductosAsync(string filePath, CancellationToken ct)
     {
         if (!File.Exists(filePath))
         {
-            _logger.LogWarning("Archivo de productos no encontrado: {Path}", filePath);
+            logger.LogWarning("Archivo de productos no encontrado: {Path}", filePath);
             return;
         }
 
-        _logger.LogInformation("--> Procesando Productos...");
+        logger.LogInformation("--> Procesando Productos...");
         using var reader = new StreamReader(filePath);
         using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = true });
 
@@ -118,18 +107,18 @@ public class EtlService : IETLService
                 new SqlParameter("@Precio", precio)
             };
 
-            await _dbContext.Database.ExecuteSqlRawAsync(
+            await dbContext.Database.ExecuteSqlRawAsync(
                 "EXEC sp_InsertarProducto @IdProducto, @Nombre, @Categoria, @Precio", param, ct);
             procesados++;
         }
-        _logger.LogInformation("Productos procesados: {P}", procesados);
+        logger.LogInformation("Productos procesados: {P}", procesados);
     }
 
     private async Task ProcesarVentasAsync(string filePath, CancellationToken ct)
     {
         if (!File.Exists(filePath)) throw new FileNotFoundException($"Falta {filePath}");
 
-        _logger.LogInformation("--> Procesando Ventas...");
+        logger.LogInformation("--> Procesando Ventas...");
         using var reader = new StreamReader(filePath);
         using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = true });
 
@@ -165,7 +154,7 @@ public class EtlService : IETLService
                     new SqlParameter("@Total", totalCalculado)
                 };
 
-                await _dbContext.Database.ExecuteSqlRawAsync(
+                await dbContext.Database.ExecuteSqlRawAsync(
                     "EXEC sp_InsertarVenta @IdVenta, @IdCliente, @IdProducto, @IdFuente, @Cantidad, @Precio, @Fecha, @Total",
                     parameters, ct);
 
@@ -178,6 +167,6 @@ public class EtlService : IETLService
             }
         }
 
-        _logger.LogInformation("Ventas -> Procesados: {P} | Insertados: {I} | Rechazados: {R}", procesados, insertados, rechazados);
+        logger.LogInformation("Ventas -> Procesados: {P} | Insertados: {I} | Rechazados: {R}", procesados, insertados, rechazados);
     }
 }

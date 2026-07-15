@@ -6031,11 +6031,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj",
+      "projectUniqueName": "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj",
       "projectName": "Infrastructure",
-      "projectPath": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj",
+      "projectPath": "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj",
       "packagesPath": "C:\\Users\\elava\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\obj\\",
+      "outputPath": "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
