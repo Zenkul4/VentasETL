@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -22,14 +25,22 @@ public class EtlService(
         logger.LogInformation("Iniciando el pipeline ETL completo (Extracción de Multi-Fuentes)...");
 
         // 1. Fase de Extracción
-        var clientesResult = await clienteExtractor.ExtractAsync(cancellationToken);
-        if (clientesResult.IsFailure) return Result.Failure($"Error en extracción de clientes: {clientesResult.Error}");
+        var clientesResult = await clienteExtractor.ExtractAsync(directoryPath, cancellationToken);
+        if (clientesResult.IsFailure) logger.LogWarning("Error en extracción de clientes: {Error}", clientesResult.Error);
 
-        var productosResult = await productoExtractor.ExtractAsync(cancellationToken);
-        if (productosResult.IsFailure) return Result.Failure($"Error en extracción de productos: {productosResult.Error}");
+        var productosResult = await productoExtractor.ExtractAsync(directoryPath, cancellationToken);
+        if (productosResult.IsFailure) logger.LogWarning("Error en extracción de productos: {Error}", productosResult.Error);
 
-        var ventasResult = await ventaExtractor.ExtractAsync(cancellationToken);
-        if (ventasResult.IsFailure) return Result.Failure($"Error en extracción de ventas: {ventasResult.Error}");
+        var ventasResult = await ventaExtractor.ExtractAsync(directoryPath, cancellationToken);
+        if (ventasResult.IsFailure) logger.LogWarning("Error en extracción de ventas: {Error}", ventasResult.Error);
+
+        var listaClientes = clientesResult.IsSuccess ? clientesResult.Value : [];
+        var listaProductos = productosResult.IsSuccess ? productosResult.Value : [];
+        var listaVentas = ventasResult.IsSuccess ? ventasResult.Value : [];
+
+        logger.LogInformation(
+            "Resumen de Extracción -> Clientes: {C}, Productos: {P}, Ventas: {V}",
+            listaClientes.Count(), listaProductos.Count(), listaVentas.Count());
 
         // 2. Fase de Transformación y Carga (Data Warehouse)
         try
@@ -38,7 +49,7 @@ public class EtlService(
 
             // Carga hacia Staging de Clientes
             logger.LogInformation("Cargando clientes en Staging...");
-            foreach (var cliente in clientesResult.Value)
+            foreach (var cliente in listaClientes)
             {
                 var param = new[] {
                     new SqlParameter("@IdCliente", cliente.IdCliente),
@@ -52,7 +63,7 @@ public class EtlService(
 
             // Carga hacia Staging de Productos
             logger.LogInformation("Cargando productos en Staging...");
-            foreach (var producto in productosResult.Value)
+            foreach (var producto in listaProductos)
             {
                 var param = new[] {
                     new SqlParameter("@IdProducto", producto.IdProducto),
@@ -66,7 +77,7 @@ public class EtlService(
 
             // Carga hacia Staging de Ventas
             logger.LogInformation("Cargando ventas en Staging...");
-            foreach (var venta in ventasResult.Value)
+            foreach (var venta in listaVentas)
             {
                 var param = new[] {
                     new SqlParameter("@IdVenta", venta.IdVenta),
@@ -78,9 +89,21 @@ public class EtlService(
                     new SqlParameter("@Fecha", venta.Fecha),
                     new SqlParameter("@Total", venta.Total)
                 };
-                await dbContext.Database.ExecuteSqlRawAsync(
-                    "EXEC sp_InsertarVenta @IdVenta, @IdCliente, @IdProducto, @IdFuente, @Cantidad, @Precio, @Fecha, @Total", 
-                    param, cancellationToken);
+                try
+                {
+                    await dbContext.Database.ExecuteSqlRawAsync(
+                        "EXEC sp_InsertarVenta @IdVenta, @IdCliente, @IdProducto, @IdFuente, @Cantidad, @Precio, @Fecha, @Total", 
+                        param, cancellationToken);
+                }
+                catch (SqlException ex)
+                {
+                    if (ex.Number == 50001)
+                    {
+                        logger.LogWarning("La venta con IdVenta {IdVenta} ya existe, saltando registro (Error 50001).", venta.IdVenta);
+                        continue;
+                    }
+                    throw;
+                }
             }
 
             // La inserción final en el esquema estrella se delega al stored procedure según la directriz
