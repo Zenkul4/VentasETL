@@ -1,47 +1,36 @@
-﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration; // Necesario para leer appsettings
+using Microsoft.Extensions.Configuration;
 using VentasETL.Core.Interfaces;
 
 namespace VentasETL.Infrastructure;
 
-public class Worker : BackgroundService
+public class Worker(ILogger<Worker> logger, IServiceProvider serviceProvider, IConfiguration configuration) : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
-    private readonly IServiceProvider _serviceProvider;
-    private readonly IConfiguration _configuration; // Inyectar IConfiguration
-
-    public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider, IConfiguration configuration)
-    {
-        _logger = logger;
-        _serviceProvider = serviceProvider;
-        _configuration = configuration;
-    }
-
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Worker iniciado a las: {time}", DateTimeOffset.Now);
+        logger.LogInformation("Worker iniciado a las: {time}", DateTimeOffset.Now);
 
-        using (var scope = _serviceProvider.CreateScope())
+        using (var scope = serviceProvider.CreateScope())
         {
             var etlService = scope.ServiceProvider.GetRequiredService<IETLService>();
 
             // Leer la ruta desde appsettings.json
-            string rutaCsv = _configuration["ETLSettings:DataSourcesPath"]
-                             ?? throw new ArgumentNullException("La ruta del CSV no está configurada.");
+            string rutaCsv = configuration["ETLSettings:DataSourcesPath"]
+                             ?? throw new InvalidOperationException("La ruta del CSV no está configurada.");
 
-            _logger.LogInformation("Leyendo archivos desde: {ruta}", rutaCsv);
+            logger.LogInformation("Leyendo archivos desde: {ruta}", rutaCsv);
 
             var resultado = await etlService.EjecutarProcesoCargaAsync(rutaCsv, stoppingToken);
 
             if (resultado.IsFailure)
             {
-                _logger.LogError("El proceso ETL falló: {Error}", resultado.Error);
+                logger.LogError("El proceso ETL falló: {Error}", resultado.Error);
             }
             else
             {
-                _logger.LogInformation("Proceso ETL concluido con éxito.");
+                logger.LogInformation("Proceso ETL concluido con éxito.");
             }
         }
 

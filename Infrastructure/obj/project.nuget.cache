@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4YeCcCwnSCY=",
+  "dgSpecHash": "QRwkhPOG9Vw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj",
+  "projectFilePath": "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\elava\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\elava\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
