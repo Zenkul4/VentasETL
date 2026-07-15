@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using VentasETL.Core.Entities;
+using global::Core.Entities;
 
 namespace VentasETL.Infrastructure.Data;
 
