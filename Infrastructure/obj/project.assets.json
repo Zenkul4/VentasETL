@@ -6058,8 +6058,8 @@
           "framework": "net9.0",
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Core.csproj": {
-              "projectPath": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Core.csproj"
+            "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Core.csproj": {
+              "projectPath": "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Core.csproj"
             }
           }
         }

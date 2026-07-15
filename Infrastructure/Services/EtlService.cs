@@ -4,17 +4,30 @@ using CsvHelper.Configuration;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using global::Core.Entities;
+using global::Core.Interfaces;
 using VentasETL.Core.Interfaces;
 using VentasETL.Core.ResultPattern;
 using VentasETL.Infrastructure.Data;
 
 namespace VentasETL.Infrastructure.Services;
 
-public class EtlService(VentasDbContext dbContext, ILogger<EtlService> logger, IUnitOfWork unitOfWork) : IETLService
+public class EtlService(
+    VentasDbContext dbContext,
+    ILogger<EtlService> logger,
+    IUnitOfWork unitOfWork,
+    IDataExtractor<Cliente> clienteExtractor,
+    IDataExtractor<Producto> productoExtractor,
+    IDataExtractor<Venta> ventaExtractor) : IETLService
 {
     public async Task<Result> EjecutarProcesoCargaAsync(string directoryPath, CancellationToken cancellationToken)
     {
         logger.LogInformation("Iniciando el pipeline ETL completo...");
+
+        // Extractores inyectados para uso futuro del pipeline multi-fuente
+        _ = clienteExtractor;
+        _ = productoExtractor;
+        _ = ventaExtractor;
 
         try
         {

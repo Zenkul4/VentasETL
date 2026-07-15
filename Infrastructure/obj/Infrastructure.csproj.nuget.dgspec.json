@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj": {}
+    "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj": {}
   },
   "projects": {
-    "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Core.csproj": {
+    "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Core.csproj",
+        "projectUniqueName": "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Core.csproj",
         "projectName": "Core",
-        "projectPath": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Core.csproj",
+        "projectPath": "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Core.csproj",
         "packagesPath": "C:\\Users\\elava\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\obj\\",
+        "outputPath": "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -72,14 +72,14 @@
         }
       }
     },
-    "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj": {
+    "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj",
+        "projectUniqueName": "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj",
+        "projectPath": "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj",
         "packagesPath": "C:\\Users\\elava\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\obj\\",
+        "outputPath": "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -102,8 +102,8 @@
             "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Core.csproj": {
-                "projectPath": "C:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Core.csproj"
+              "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Core.csproj": {
+                "projectPath": "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Core\\Core.csproj"
               }
             }
           }
