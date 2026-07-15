@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "AbyE/YScY8Q=",
+  "dgSpecHash": "e/TLubNw284=",
   "success": true,
   "projectFilePath": "c:\\Users\\elava\\source\\repos\\VentasETLSolution\\Infrastructure\\Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -50,6 +50,7 @@
     "C:\\Users\\elava\\.nuget\\packages\\microsoft.extensions.filesystemglobbing\\9.0.0\\microsoft.extensions.filesystemglobbing.9.0.0.nupkg.sha512",
     "C:\\Users\\elava\\.nuget\\packages\\microsoft.extensions.hosting\\9.0.0\\microsoft.extensions.hosting.9.0.0.nupkg.sha512",
     "C:\\Users\\elava\\.nuget\\packages\\microsoft.extensions.hosting.abstractions\\9.0.0\\microsoft.extensions.hosting.abstractions.9.0.0.nupkg.sha512",
+    "C:\\Users\\elava\\.nuget\\packages\\microsoft.extensions.http\\9.0.0\\microsoft.extensions.http.9.0.0.nupkg.sha512",
     "C:\\Users\\elava\\.nuget\\packages\\microsoft.extensions.identity.core\\9.0.0\\microsoft.extensions.identity.core.9.0.0.nupkg.sha512",
     "C:\\Users\\elava\\.nuget\\packages\\microsoft.extensions.identity.stores\\9.0.0\\microsoft.extensions.identity.stores.9.0.0.nupkg.sha512",
     "C:\\Users\\elava\\.nuget\\packages\\microsoft.extensions.logging\\9.0.0\\microsoft.extensions.logging.9.0.0.nupkg.sha512",

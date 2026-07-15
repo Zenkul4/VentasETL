@@ -177,3 +177,4 @@ c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\obj\Debug\net9.0\re
 c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\obj\Debug\net9.0\Infrastructure.pdb
 c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\obj\Debug\net9.0\Infrastructure.genruntimeconfig.cache
 c:\Users\elava\source\repos\VentasETLSolution\Infrastructure\obj\Debug\net9.0\ref\Infrastructure.dll
+C:\Users\elava\source\repos\VentasETLSolution\Infrastructure\bin\Debug\net9.0\Microsoft.Extensions.Http.dll
