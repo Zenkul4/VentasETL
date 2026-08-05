@@ -1,6 +1,6 @@
 using VentasETL.Core.ResultPattern;
 
-namespace Core.Interfaces;
+namespace VentasETL.Core.Interfaces;
 
 public interface IDataExtractor<T>
 {

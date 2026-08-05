@@ -3,7 +3,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.Extensions.Logging;
 using Core.Entities;
-using Core.Interfaces;
+using VentasETL.Core.Interfaces;
 using VentasETL.Core.ResultPattern;
 
 namespace VentasETL.Infrastructure.Services.Extractors;
