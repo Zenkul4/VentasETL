@@ -1,7 +1,25 @@
+## Visual Studio y Entornos IDE
 .vs/
-.json/
-.env/
-.bin/
-.obj/
-bin/
-obj/
+.vscode/
+*.suo
+*.user
+*.useros
+*.sln.docstates
+
+## Compilación y Salidas de .NET (Cualquier subcarpeta)
+[Bb]in/
+[Oo]bj/
+**/bin/
+**/obj/
+
+## Archivos de Caché y Bases de Datos Locales
+*.sqlite
+*.sqlite-journal
+*.db
+*.log
+
+## Variables de Entorno y Configuración Sensible
+.env
+*.env
+
+*.json
