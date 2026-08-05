@@ -10,6 +10,7 @@ public class VentasDbContext(DbContextOptions<VentasDbContext> options) : DbCont
     public DbSet<Dim_Producto> DimProductos { get; set; } = null!;
     public DbSet<Dim_Tiempo> DimTiempos { get; set; } = null!;
     public DbSet<Dim_Fuente> DimFuentes { get; set; } = null!;
+    public DbSet<Cliente> Clientes { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -27,6 +28,17 @@ public class VentasDbContext(DbContextOptions<VentasDbContext> options) : DbCont
             entity.Property(e => e.Pais).HasMaxLength(50).IsUnicode(false);
             entity.Property(e => e.Region).HasMaxLength(50).IsUnicode(false);
             entity.Property(e => e.Ciudad).HasMaxLength(50).IsUnicode(false);
+        });
+
+        // Cliente configuration (Tabla/Origen de Clientes)
+        modelBuilder.Entity<Cliente>(entity =>
+        {
+            entity.ToTable("Clientes");
+            entity.HasKey(e => e.IdCliente);
+            entity.Property(e => e.IdCliente).ValueGeneratedNever();
+            entity.Property(e => e.Nombre).HasMaxLength(100).IsRequired().IsUnicode(false);
+            entity.Property(e => e.Email).HasMaxLength(100).IsUnicode(false);
+            entity.Property(e => e.Region).HasMaxLength(50).IsUnicode(false);
         });
 
         // Dim_Producto configuration
