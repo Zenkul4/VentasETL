@@ -5,7 +5,6 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Core.Entities;
-using Core.Interfaces;
 using VentasETL.Core.Interfaces;
 using VentasETL.Core.ResultPattern;
 using VentasETL.Infrastructure.Data;

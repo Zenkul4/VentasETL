@@ -1,12 +1,16 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using VentasETL.Core.Configurations;
 using VentasETL.Core.Interfaces;
 
 namespace VentasETL.Infrastructure;
 
-public class Worker(IServiceScopeFactory scopeFactory, ILogger<Worker> logger, IConfiguration configuration) : BackgroundService
+public class Worker(
+    IServiceScopeFactory scopeFactory,
+    ILogger<Worker> logger,
+    IOptions<EtlOptions> etlOptions) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -19,7 +23,7 @@ public class Worker(IServiceScopeFactory scopeFactory, ILogger<Worker> logger, I
                 using var scope = scopeFactory.CreateScope();
                 var etlService = scope.ServiceProvider.GetRequiredService<IETLService>();
 
-                string rutaCsv = configuration["ETLSettings:DataSourcesPath"] ?? string.Empty;
+                string rutaCsv = etlOptions.Value.DataSourcesPath;
 
                 if (string.IsNullOrEmpty(rutaCsv))
                 {
