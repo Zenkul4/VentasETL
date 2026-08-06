@@ -25,17 +25,7 @@ public class Worker(
 
                 string rutaCsv = etlOptions.Value.DataSourcesPath;
 
-                if (string.IsNullOrWhiteSpace(rutaCsv))
-                {
-                    // Fallback seguro a la carpeta local 'csv' en la solución
-                    rutaCsv = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "csv"));
-                    if (!Directory.Exists(rutaCsv))
-                    {
-                        rutaCsv = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "csv"));
-                    }
-                }
-
-                if (string.IsNullOrWhiteSpace(rutaCsv))
+                if (string.IsNullOrEmpty(rutaCsv))
                 {
                     logger.LogError("La ruta de origen no está configurada (ETLSettings:DataSourcesPath).");
                 }
