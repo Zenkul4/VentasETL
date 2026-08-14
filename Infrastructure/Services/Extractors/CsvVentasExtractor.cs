@@ -50,7 +50,7 @@ public class CsvVentasExtractor(
             var records = new List<Venta>();
             await foreach (var record in csv.GetRecordsAsync<Venta>(cancellationToken))
             {
-                if (record.IdFuente == 0) record.IdFuente = 1; // Fuente CSV por defecto
+                if (record.IdFuente == 0) record.IdFuente = 1; 
                 if (record.Total == 0) record.Total = record.Cantidad * record.Precio;
 
                 records.Add(record);

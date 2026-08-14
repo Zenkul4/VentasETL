@@ -26,7 +26,7 @@ public class DbClientesExtractor(
 
         try
         {
-            // Extracción relacional vía EF Core
+            
             var clientesDb = await dbContext.Clientes
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
@@ -49,7 +49,7 @@ public class DbClientesExtractor(
             logger.LogWarning(ex, "Fallo al conectar o consultar la base de datos relacional de Clientes. Ejecutando fallback a archivo local Clientes.csv...");
         }
 
-        // Fallback resguardado a archivo CSV de Clientes
+        
         return await ExtraerDesdeArchivoFallbackAsync(basePath, timer, cancellationToken);
     }
 

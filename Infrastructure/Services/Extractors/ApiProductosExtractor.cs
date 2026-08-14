@@ -62,7 +62,7 @@ public class ApiProductosExtractor(
             logger.LogWarning(ex, "Falló la comunicación con la API REST de Productos en {Endpoint}. Ejecutando fallback a archivo local Productos.csv...", endpoint);
         }
 
-        // Fallback resguardado: Leer archivo local Productos.csv si la API no está disponible
+        
         return await ExtraerDesdeArchivoFallbackAsync(basePath, timer, cancellationToken);
     }
 

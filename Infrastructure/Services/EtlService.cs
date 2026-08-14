@@ -141,31 +141,105 @@ public class EtlService(
                 }
             }
 
-            // 3. FASE DE CONSOLIDACIÓN FINAL EN DATA WAREHOUSE
-            logger.LogInformation("Ejecutando procedimiento almacenado de consolidación final en Data Warehouse (sp_ETL_CargarDataWarehouse)...");
+            // 3. FASE DE LIMPIEZA PREVIA Y CONSOLIDACIÓN EN DATA WAREHOUSE
+            logger.LogInformation("Iniciando fase de consolidación final en Data Warehouse...");
+
+            // 3.1 Limpieza previa de tablas de hechos (Fact_Ventas)
+            logger.LogInformation("Iniciando proceso de limpieza de tablas de hechos (Fact_Ventas)...");
+            int registrosFactPrevios = 0;
+            try
+            {
+                registrosFactPrevios = await dbContext.FactVentas.CountAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                logger.LogDebug(ex, "No se pudo obtener el conteo previo de Fact_Ventas.");
+            }
+
+            await dbContext.Database.ExecuteSqlRawAsync("EXEC sp_ETL_LimpiarFactTables", cancellationToken);
+            logger.LogInformation("Proceso de limpieza de tablas de hechos completado con éxito. Registros limpiados en Fact_Ventas: {Cantidad}", registrosFactPrevios);
+
+            // 3.2 Captura de métricas de dimensiones previas a la consolidación
+            int preDimClientes = 0, preDimProductos = 0, preDimTiempos = 0, preDimFuentes = 0;
+            try
+            {
+                preDimClientes = await dbContext.DimClientes.CountAsync(cancellationToken);
+                preDimProductos = await dbContext.DimProductos.CountAsync(cancellationToken);
+                preDimTiempos = await dbContext.DimTiempos.CountAsync(cancellationToken);
+                preDimFuentes = await dbContext.DimFuentes.CountAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                logger.LogDebug(ex, "Métricas previas de dimensiones no disponibles (DW en inicialización).");
+            }
+
+            // 3.3 Ejecución del procedimiento de consolidación a Data Warehouse
+            logger.LogInformation("Ejecutando procedimiento almacenado sp_ETL_CargarDataWarehouse...");
             await dbContext.Database.ExecuteSqlRawAsync("EXEC sp_ETL_CargarDataWarehouse", cancellationToken);
+
+            // 3.4 Captura de métricas finales tras la consolidación
+            int postDimClientes = 0, postDimProductos = 0, postDimTiempos = 0, postDimFuentes = 0, postFactVentas = 0;
+            try
+            {
+                postDimClientes = await dbContext.DimClientes.CountAsync(cancellationToken);
+                postDimProductos = await dbContext.DimProductos.CountAsync(cancellationToken);
+                postDimTiempos = await dbContext.DimTiempos.CountAsync(cancellationToken);
+                postDimFuentes = await dbContext.DimFuentes.CountAsync(cancellationToken);
+                postFactVentas = await dbContext.FactVentas.CountAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                logger.LogDebug(ex, "Métricas finales del DW no disponibles.");
+            }
 
             await unitOfWork.CommitAsync();
             globalTimer.Stop();
 
-            int totalInsertados = insertadosClientes + insertadosProductos + insertadosVentas;
-            int totalOmitidos = omitidosClientes + omitidosProductos + omitidosVentas;
+            int nuevosDimClientes = Math.Max(0, postDimClientes - preDimClientes);
+            int nuevosDimProductos = Math.Max(0, postDimProductos - preDimProductos);
+            int nuevosDimTiempos = Math.Max(0, postDimTiempos - preDimTiempos);
+            int nuevosDimFuentes = Math.Max(0, postDimFuentes - preDimFuentes);
+
+            int totalInsertadosStaging = insertadosClientes + insertadosProductos + insertadosVentas;
+            int totalOmitidosStaging = omitidosClientes + omitidosProductos + omitidosVentas;
             double tiempoSegundos = globalTimer.Elapsed.TotalSeconds;
 
             logger.LogInformation(
                 """
                 ================================================================================
-                RESUMEN EJECUTIVO DE EJECUCIÓN DEL PIPELINE ETL
+                RESUMEN EJECUTIVO DE EJECUCIÓN Y CONSOLIDACIÓN DEL PIPELINE ETL
                 ================================================================================
-                - Extraídos  : Clientes: {ClientesExtraidos} | Productos: {ProductosExtraidos} | Ventas: {VentasExtraidas}
-                - Staging    : Insertados: {TotalInsertados} (Clientes: {CIns}, Productos: {PIns}, Ventas: {VIns})
-                               Omitidos   : {TotalOmitidos} (Clientes: {COmi}, Productos: {POmi}, Ventas: {VOmi})
-                - Rendimiento: Tiempo Total: {TiempoMs} ms ({TiempoSeg:F2} s)
+                1. EXTRACCIÓN MULTI-FUENTE:
+                   - Clientes Extraídos  : {ClientesExtraidos}
+                   - Productos Extraídos : {ProductosExtraidos}
+                   - Ventas Extraídas    : {VentasExtraidas}
+
+                2. CARGA EN STAGING (IDEMPOTENCIA):
+                   - Total Insertados   : {TotalInsertados} (Clientes: {CIns}, Productos: {PIns}, Ventas: {VIns})
+                   - Total Omitidos     : {TotalOmitidos} (Clientes: {COmi}, Productos: {POmi}, Ventas: {VOmi})
+
+                3. LIMPIEZA Y CARGA DE TABLAS DE HECHOS (FACT):
+                   - Fact_Ventas Limpiadas  : {FactLimpiadas} registros eliminados previamente
+                   - Fact_Ventas Insertadas : {FactInsertadas} facturas consolidadas
+
+                4. CONSOLIDACIÓN DE DIMENSIONES DATA WAREHOUSE:
+                   - Dim_Cliente        : Total: {DimClienteTotal} (Nuevos: {DimClienteNuevos}, Existentes/Actualizados: {DimClienteExistentes})
+                   - Dim_Producto       : Total: {DimProductoTotal} (Nuevos: {DimProductoNuevos}, Existentes/Actualizados: {DimProductoExistentes})
+                   - Dim_Tiempo         : Total: {DimTiempoTotal} (Nuevos: {DimTiempoNuevos})
+                   - Dim_Fuente         : Total: {DimFuenteTotal} (Nuevos: {DimFuenteNuevos})
+
+                5. RENDIMIENTO GLOBAL:
+                   - Tiempo Total Pipeline: {TiempoMs} ms ({TiempoSeg:F2} s)
                 ================================================================================
                 """,
                 totalClientesExtraidos, totalProductosExtraidos, totalVentasExtraidas,
-                totalInsertados, insertadosClientes, insertadosProductos, insertadosVentas,
-                totalOmitidos, omitidosClientes, omitidosProductos, omitidosVentas,
+                totalInsertadosStaging, insertadosClientes, insertadosProductos, insertadosVentas,
+                totalOmitidosStaging, omitidosClientes, omitidosProductos, omitidosVentas,
+                registrosFactPrevios, postFactVentas,
+                postDimClientes, nuevosDimClientes, (postDimClientes - nuevosDimClientes),
+                postDimProductos, nuevosDimProductos, (postDimProductos - nuevosDimProductos),
+                postDimTiempos, nuevosDimTiempos,
+                postDimFuentes, nuevosDimFuentes,
                 globalTimer.ElapsedMilliseconds, tiempoSegundos);
 
             return Result.Success();

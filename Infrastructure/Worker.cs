@@ -50,7 +50,7 @@ public class Worker(
                 logger.LogCritical(ex, "Fallo crítico no controlado en la iteración del Worker. El servicio no se detendrá.");
             }
 
-            // Esperar 1 minuto antes de la próxima ejecución (evita bombardear la base de datos)
+            
             await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
         }
     }
