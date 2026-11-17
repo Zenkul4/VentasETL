@@ -6,20 +6,27 @@
 *.useros
 *.sln.docstates
 
-## CompilaciÛn y Salidas de .NET (Cualquier subcarpeta)
+## Compilaci√≥n y Salidas de .NET (Cualquier subcarpeta)
 [Bb]in/
 [Oo]bj/
 **/bin/
 **/obj/
 
-## Archivos de CachÈ y Bases de Datos Locales
+## Archivos de Cach√© y Bases de Datos Locales
 *.sqlite
 *.sqlite-journal
 *.db
 *.log
 
-## Variables de Entorno y ConfiguraciÛn Sensible
+## Variables de Entorno y Configuraci√≥n Sensible
 .env
 *.env
 
-*.json
+## Configuraci√≥n local de la aplicaci√≥n y secretos
+**/appsettings*.json
+!**/appsettings.example.json
+**/secrets*.json
+.env.*
+!.env.example
+**/*.pfx
+**/*.pem
